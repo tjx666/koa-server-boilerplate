@@ -1,0 +1,5 @@
+test/**/*.test.js
+-r intelli-espower-loader 
+-s 100
+-t 3000
+--reporter mochawesome
