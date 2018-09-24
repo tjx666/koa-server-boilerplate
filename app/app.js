@@ -1,16 +1,26 @@
+//  .__                               .__    ________ ________ ________
+//  |  | ___.__._______   ____ _____  |  |  /  _____//  _____//  _____/
+//  |  |<   |  |\_  __ \_/ __ \__  \ |  | /   __  \/   __  \/   __  \ 
+//  |  |_\___  | |  | \/\  ___/ / __ \|  |_\  |__\  \  |__\  \  |__\  \
+//  |____/ ____| |__|    \___  >____  /____/\_____  /\_____  /\_____  /
+//       \/                  \/     \/            \/       \/       \/ 
+
 'use strict';
 
 const path = require('path');
 const chalk = require('chalk');
 const { server: serverConfiguration } = require('../config');
+const log4js = require('./extend/log4js');
 const Koa = require('koa');
 const logger = require('koa-logger');
 const staticServer = require('koa-static');
 const bodyParser = require('koa-bodyparser');
-const mongoDB = require('./middleware/mongoDB');
-const redis = require('./middleware/redis');
-const validator = require('./middleware/validator');
 const restify = require('./middleware/restify');
+const router = require('./middleware/controller');
+const mongoDB = require('./extend/mongoDB');
+const redis = require('./extend/redis');
+const validator = require('./extend/validator');
+
 
 
 const server = new Koa();
@@ -28,17 +38,32 @@ const init = __ => {
     server.use(bodyParser());
 
     // add models to ctx
-    server.use(mongoDB());
+    server.models = mongoDB();
 
     // add redis to ctx
-    server.use(redis());
+    server.context.redis = redis();
 
     // add Joi to ctx
-    server.use(validator());
+    server.context.Joi = validator();
+
+    // add loggers
+    server.logger = log4js.getLogger('application');
+    server.context.logger = log4js.getLogger('context');
 
     // restful and deal error
-    server.use(restify());
+    server.use(restify([
+        '/api/',
+        '/user/login',
+    ]));
+
+    // add routes to server
+    server.use(router());
 };
+
+const errorLogger = log4js.getLogger('appError');
+server.on('error', err => {
+    errorLogger.error(err);
+});
 
 process.on('unhandledRejection', (err) => {
     console.error(chalk.red(err));

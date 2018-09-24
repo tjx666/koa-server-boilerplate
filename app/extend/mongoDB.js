@@ -14,9 +14,5 @@ module.exports = __ => {
         console.log('Connection to mongodb open!');
     });
 
-    
-    return async (ctx, next) => {
-        ctx.models = models;
-        await next();
-    };
+    return models;
 };

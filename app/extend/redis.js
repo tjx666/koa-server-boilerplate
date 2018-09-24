@@ -15,8 +15,5 @@ module.exports = __ => {
         console.log('RedisError:', err);
     });
 
-    return async (ctx, next) => {
-        ctx.redis = redis;
-        await next();
-    };
+    return client;
 };
