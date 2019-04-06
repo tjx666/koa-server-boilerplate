@@ -15,24 +15,27 @@ const Koa = require('koa');
 const logger = require('koa-logger');
 const staticServer = require('koa-static');
 const bodyParser = require('koa-bodyparser');
+const historyApiFallback = require('./middleware/history-api-fallback');
 const restify = require('./middleware/restify');
 const router = require('./middleware/controller');
 const mongoDB = require('./extend/mongoDB');
-const redis = require('./extend/redis');
+// const redis = require('./extend/redis');
 const validator = require('./extend/validator');
 
 
 
 const server = new Koa();
 
-
 // init middleware
 const init = __ => {
     // print access info
     server.use(logger());
 
+    server.use(historyApiFallback({enable: true}));
+    
     // static resource
     server.use(staticServer(path.resolve(__dirname, './public')));
+
 
     // parse json body
     server.use(bodyParser());
@@ -41,7 +44,7 @@ const init = __ => {
     server.models = mongoDB();
 
     // add redis to ctx
-    server.context.redis = redis();
+    // server.context.redis = redis();
 
     // add Joi to ctx
     server.context.Joi = validator();

@@ -1,8 +1,10 @@
 'use strict';
 
-module.exports = (pathPrefix = '/api/') => {
+module.exports = (pathPrefixes = ['/api/']) => {
     return async (ctx, next) => {
-        if (ctx.request.path.startsWith(pathPrefix)) {
+        const path = ctx.request.path;
+        const shouldRestify = pathPrefixes.some(pathPrefix => path.startsWith(pathPrefix));
+        if (shouldRestify) {
             console.log(`Process API ${ctx.request.method} ${ctx.request.url}...`);
             ctx.rest = (data, status) => {
                 ctx.response.type = 'application/json';
