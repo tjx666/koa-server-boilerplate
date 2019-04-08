@@ -1,18 +1,20 @@
 const mongoose = require('mongoose');
-const { mongoose: { options }} = require('../../config');
+const mongoDBConfiguration = require('../../config').mongoDB;
 const models = require('../model');
 
 
-module.exports = __ => {
-    const URL = 'mongodb://localhost:27017';
-
+module.exports = (server, options) => {
+    const { logger } = server;
+    const URL = mongoDBConfiguration.URL;
     mongoose.connect(URL, options);
 
     const db = mongoose.connection;
-    db.on('error', console.error.bind(console, 'Connect to mongodb error!'));
+    db.on('error', () => {
+        logger.error('Connect to mongodb error!');
+    });
     db.once('open', __ => {
-        console.log('Connection to mongodb open!');
+        logger.info('Connection to mongodb open!');
     });
 
-    return models;
+    server.context.models = models;
 };

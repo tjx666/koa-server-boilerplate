@@ -2,6 +2,6 @@
 
 const Joi = require('joi');
 
-module.exports = __ => {
-    return Joi;
+module.exports = (server, options) => {
+    server.context.validator = joi;
 };

@@ -1,4 +1,6 @@
 exports.default = {
+    url: 'mongodb://localhost:27017',
+    
     options: {
         dbName: 'vote',
         useNewUrlParser: true,
