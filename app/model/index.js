@@ -1,36 +1,30 @@
 'use strict';
 
 const path = require('path');
-const fse = require('fs-extra');
+const fs = require('fs-extra');
 const chalk = require('chalk');
-const pluralize = require('pluralize');
-const configuration = require('../../config');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const configuration = require('../../config');
+const defaultSchemaOptions = configuration.mongoDB.defaultSchemaOptions;
 
- 
-const defaultSchemaOptions = configuration.mongoose.defaultSchemaOptions;
 
-
-const getModels =  __ => {
+const getModels = __ => {
     console.info(chalk.yellow('Start define the models!'));
     console.info(chalk.magentaBright(`DefaultSchemaOptions:\n${JSON.stringify(defaultSchemaOptions, null, '     ')}`));
-    const moduleNames = fse
-        .readdirSync(__dirname)
-        .filter(moduleName => moduleName !== 'index.js')
-        .map(moduleName => moduleName.slice(0, -3));
-
     const models = {};
-    for (const moduleName of moduleNames) {
-        const module = require(path.resolve(__dirname, moduleName));
-        const modelName = `${moduleName[0].toUpperCase() }${ moduleName }`;
-        console.info(`${chalk.yellow('Define the model') } ${ chalk.yellow.underline.bold(modelName) }${ chalk.yellow(', structure:\n') }${ chalk.green(JSON.stringify(module, null, '   ')) }`);
-        const modelSchema = new Schema(module, defaultSchemaOptions);
-        models[modelName] = mongoose.model(moduleName, modelSchema, pluralize(moduleName));
-    }
+
+    fs.readdirSync(__dirname)
+        .filter(fileName => fileName !== 'index.js')
+        .forEach(fileName => {
+            const modelName = fileName.slice(0, -3);
+            const model = require(path.resolve(__dirname, moduleName));
+            console.info(`${chalk.yellow('Define the model') } ${ chalk.yellow.underline.bold(modelName) }${ chalk.yellow(', structure:\n') }${ chalk.green(JSON.stringify(module, null, '   ')) }`);
+            const modelSchema = new Schema(model, defaultSchemaOptions);
+            models[modelName] = mongoose.model(modelName, modelSchema);
+        });
 
     return models;
 };
 
 module.exports = getModels();
-

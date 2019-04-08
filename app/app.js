@@ -15,7 +15,7 @@ const Koa = require('koa');
 const logger = require('koa-logger');
 const staticServer = require('koa-static');
 const bodyParser = require('koa-bodyparser');
-const historyApiFallback = require('./middleware/history-api-fallback');
+const historyApiFallback = require('./middleware/historyApiFallback');
 const restify = require('./middleware/restify');
 const router = require('./middleware/controller');
 const mongoDB = require('./extend/mongoDB');
@@ -50,8 +50,8 @@ const init = __ => {
     server.context.Joi = validator();
 
     // add loggers
-    server.logger = log4js.getLogger('application');
-    server.context.logger = log4js.getLogger('context');
+    server.logger = log4js.appLogger,
+    server.context.logger = log4js.ctxLogger;
 
     // restful and deal error
     server.use(restify([

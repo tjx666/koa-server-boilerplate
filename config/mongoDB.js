@@ -1,17 +1,4 @@
-'use strict';
-
-// server configuration
-exports.server = {
-    host: 'localhost',
-    port: 3000,
-};
-
-exports.weapp = {
-    appid: '',
-    secret: '',
-};
-
-exports.mongoose = {
+exports.default = {
     options: {
         dbName: 'vote',
         useNewUrlParser: true,
@@ -35,11 +22,4 @@ exports.mongoose = {
             updatedAt: 'updated_at',
         },
     },
-};
-
-exports.redis = {
-    host: '127.0.0.1',
-    port: 6379,
-    password: '5391848',
-    // db: 'vote'
 };
