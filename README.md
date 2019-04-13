@@ -12,6 +12,15 @@ config/override.js 这个模块用于方便的覆盖其它配置文件中的配�
 
 例如在 override.js 通过 exports.logger 导出的配置对象会覆盖 logger.js 模块导出的配置。
 
+## middleware(中间件)
+
+所有的中间件模块导出都为一个接受 options 参数的函数。
+
+目前集成的中间件有：
+
+1. historyFallbackApi 适用于作为 spa 的服务器时使用
+2. restify 用于处理 restful api，如果 path 前缀是 api 或者是options 中指定的其它前缀，则可以在路由中使用 ctx.rest。如果其它中间件抛出错误将自动以 restful 风格处理错误。即返回 { error: errorName, message: errorMessage } 形式的的 data。
+
 
 ## extend(扩展)
 

@@ -5,8 +5,6 @@
 //  |____/ ____| |__|    \___  >____  /____/\_____  /\_____  /\_____  /
 //       \/                  \/     \/            \/       \/       \/ 
 
-'use strict';
-
 const path = require('path');
 const chalk = require('chalk');
 const serverConfiguration = require('../config').server;
@@ -17,7 +15,7 @@ const loggerMiddleware = require('koa-logger');
 const staticServer = require('koa-static');
 const bodyParser = require('koa-bodyparser');
 const historyApiFallback = require('./middleware/historyApiFallback');
-const restify = require('./model/restify');
+const restify = require('./middleware/restify');
 const router = require('./middleware/controller');
 
 // extends
@@ -78,9 +76,8 @@ process.on('unhandledRejection', (err) => {
 
 init();
 
-
 // start server
-const start = __ => {
+const start = () => {
     server.listen(serverConfiguration.port, serverConfiguration.host);
     logger.info( chalk.green(`Server running at: http://${ serverConfiguration.host }:${ serverConfiguration.port }`));
 };
