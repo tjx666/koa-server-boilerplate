@@ -21,6 +21,6 @@ const setRouter = ({
 };
 
 
-module.exports = __ => {
+module.exports = (options) => {
     return router.routes();
 };

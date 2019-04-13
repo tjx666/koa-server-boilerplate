@@ -8,12 +8,14 @@
 3. test 测试配置
 4. producation 生产配置
 
-config/override.js 这个模块用于方便的覆盖其它配置文件中的配置。在该模块中导出的配置将会覆盖同名的配置模块的配置。例如在 override.js 通过 exports.logger 导出的配置对象会覆盖 logger.js 模块导出的配置。
+config/override.js 这个模块用于方便的覆盖其它配置文件中的配置。在该模块中导出的配置将会覆盖同名的配置模块的配置。
+
+例如在 override.js 通过 exports.logger 导出的配置对象会覆盖 logger.js 模块导出的配置。
 
 
 ## extend(扩展)
 
-**模块目的在于为 server 或者 ctx 提供功能扩展**。
+**extend 目的在于为 server 或者 context 提供功能扩展**。context 是所有中间件的 ctx 参数的原型。
 
 所有的扩展模块放在 app/extend 文件夹下面。
 
@@ -31,9 +33,9 @@ config/override.js 这个模块用于方便的覆盖其它配置文件中的配�
 
 ## log(日志)
 
-你可以通过 server.logger 或者 ctx.logger 来访问不同的日志对象。
+你可以通过 `server.logger` 或者 `ctx.logger` 来访问不同的日志对象。
 
 前者是项目级别的日志器，后者是 context 级别的日志器。
 
-日志输出在 logs 文件夹下面，文件名位 xxxError.log 的日志文件表示只记录了 ERROR 级别的日志的。
+日志文件存放在 logs 文件夹下面，文件名位 xxxError.log 的日志文件表示只记录了 ERROR 级别的日志。
 
