@@ -5,7 +5,6 @@ const bluebird = require('bluebird');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
-
 module.exports = (server, options) => {
     const { logger } = server;
     const client = redis.createClient(redisConfiguration.options);

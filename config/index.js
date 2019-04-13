@@ -1,9 +1,9 @@
 const fs = require('fs-extra');
 const path = require('path');
 const _ = require('lodash');
-
-const configuration = {};
 const overrideConfiguration = require('./override');
+
+configuration = {};
 fs.readFileSync(__dirname)
     .filter(fileName => !(fileName in ['index.js', 'override.js']))
     .forEach(fileName => {
@@ -12,3 +12,5 @@ fs.readFileSync(__dirname)
         // TODO: 根据不同的环境导出不同的配置
         configuration[configurationName] = _.merge(configuration, overrideConfiguration[configurationName]);
     });
+
+module.exports = configuration;

@@ -3,5 +3,5 @@
 const Joi = require('joi');
 
 module.exports = (server, options) => {
-    server.context.validator = joi;
+    server.context.validator = Joi;
 };

@@ -17,11 +17,11 @@ const loggerMiddleware = require('koa-logger');
 const staticServer = require('koa-static');
 const bodyParser = require('koa-bodyparser');
 const historyApiFallback = require('./middleware/historyApiFallback');
-const restify = require('./middleware/restify');
+const restify = require('./model/restify');
 const router = require('./middleware/controller');
 
 // extends
-const extendMongoDB = require('./extend/mongoDB');
+const extendMongodb = require('./extend/Mongodb');
 const extendLogger = require('./extend/logger');
 // const extendsRedis = require('./extend/redis');
 const extendValidator = require('./extend/validator');
@@ -48,7 +48,7 @@ const init = () => {
     server.use(bodyParser());
 
     // add models to ctx
-    extendMongoDB(server, {});
+    extendMongodb(server, {});
 
     // add redis to ctx
     // extendsRedis(server, {});
